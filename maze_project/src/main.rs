@@ -109,10 +109,10 @@ fn create_maze(cells: &Vec<&str>) -> Vec<Node> {
     return maze;
 }
 
-fn find_shortest_path(maze: &mut Vec<Node>, player: &mut (Vec<(i32, i32)>, i32), node_id: i32, finish_path: &mut Vec<(i32, i32)>) {
+fn find_shortest_path(maze: &mut Vec<Node>, player: &mut (Vec<(i32, i32)>, i32), node_id: i32, final_path: &mut Vec<(i32, i32)>) {
     let current_node = maze.iter().find(|node| node.id == node_id).cloned().unwrap();
 
-    if finish_path.len() > 0 {
+    if final_path.len() > 0 {
         return;
     }
 
@@ -127,58 +127,58 @@ fn find_shortest_path(maze: &mut Vec<Node>, player: &mut (Vec<(i32, i32)>, i32),
     }
 
     if current_node.is_end {
-        *finish_path = player.0.clone();
+        *final_path = player.0.clone();
         return;
     }
 
     if let Some(node) = current_node.south {
         if !current_node.has_doors[3] {
-            find_shortest_path(maze, player, node.id, finish_path);
+            find_shortest_path(maze, player, node.id, final_path);
         } else {
             if player.1 > 0 {
                 player.1 -= 1;
                 open_door(maze, 3, current_node.id);
                 open_door(maze, 2, node.id);
-                find_shortest_path(maze, player, node.id, finish_path);
+                find_shortest_path(maze, player, node.id, final_path);
             }
         }
     }
 
     if let Some(node) = current_node.east {
         if !current_node.has_doors[0] {
-            find_shortest_path(maze, player, node.id, finish_path);
+            find_shortest_path(maze, player, node.id, final_path);
         } else {
             if player.1 > 0 {
                 player.1 -= 1;
                 open_door(maze, 1, current_node.id);
                 open_door(maze, 0, node.id);
-                find_shortest_path(maze, player, node.id, finish_path);
+                find_shortest_path(maze, player, node.id, final_path);
             }
         }
     }
     
     if let Some(node) = current_node.north {
         if !current_node.has_doors[2] {
-            find_shortest_path(maze, player, node.id, finish_path);
+            find_shortest_path(maze, player, node.id, final_path);
         } else {
             if player.1 > 0 {
                 player.1 -= 1;
                 open_door(maze, 2, current_node.id);
                 open_door(maze, 3, node.id);
-                find_shortest_path(maze, player, node.id, finish_path);
+                find_shortest_path(maze, player, node.id, final_path);
             }
         }
     }
 
     if let Some(node) = current_node.west {
         if !current_node.has_doors[0] {
-            find_shortest_path(maze, player, node.id, finish_path);
+            find_shortest_path(maze, player, node.id, final_path);
         } else {
             if player.1 > 0 {
                 player.1 -= 1;
                 open_door(maze, 0, current_node.id);
                 open_door(maze, 1, node.id);
-                find_shortest_path(maze, player, node.id, finish_path);
+                find_shortest_path(maze, player, node.id, final_path);
             }
         }
     }
